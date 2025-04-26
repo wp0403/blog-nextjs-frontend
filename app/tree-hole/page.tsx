@@ -107,9 +107,7 @@ const TreeHole = (props) => {
   return (
     <div
       className={`${style.tree_hole} ${props.loading && "all-page-loading"} ${
-        !initialized
-          ? "opacity-0"
-          : "opacity-100 transition-opacity duration-300"
+        initialized && style["opacity_100"]
       }`}
       ref={content}
     >

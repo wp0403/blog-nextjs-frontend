@@ -1,13 +1,15 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useUpdate } from "ahooks";
+import React, { useEffect, useRef, useState } from "react";
+import { useSize, useGetState } from "ahooks";
 import { bindHandleScroll, removeScroll } from "@/utils/elementUtils";
 import style from "./virtuallyItem.module.css";
 
 const VirtuallyItem = (props) => {
-  const update = useUpdate();
+  const size = useSize(() => document.querySelector("body"));
   // 用于记录当前元素的高度
-  const itemHeight = useRef<number | null>(null);
+  const [itemHeight, setItemHeight, getItemHeight] = useGetState<number | null>(
+    null
+  );
   // 用户保存当前的元素
   const itemRef = useRef<any>(null);
   // 判断当前元素是否在可视窗口
@@ -33,38 +35,30 @@ const VirtuallyItem = (props) => {
     }
   };
 
-  const windowResize = useCallback(() => {
-    itemHeight.current = null;
-    update();
-  }, []);
-
   useEffect(() => {
     bindHandleScroll(scrollCallback);
-    window.addEventListener("resize", windowResize);
 
     return () => {
       removeScroll(scrollCallback);
-      window.removeEventListener("resize", windowResize);
     };
-  }, [windowResize]);
+  }, []);
 
   useEffect(() => {
-    if (
-      itemRef.current &&
-      itemHeight.current !== itemRef.current?.offsetHeight
-    ) {
-      itemHeight.current = itemRef.current?.offsetHeight;
+    if (itemRef.current && getItemHeight() !== itemRef.current?.offsetHeight) {
+      setItemHeight(itemRef.current?.offsetHeight);
     }
   }, [isVisual]);
+
+  useEffect(() => {
+    setItemHeight(null);
+  }, [size?.width]);
 
   return (
     <div
       className={style.virtually_item}
       ref={itemRef}
       style={{
-        height:
-          props.height ||
-          `${itemHeight.current ? `${itemHeight.current}px` : "auto"}`,
+        height: props.height || `${itemHeight ? `${itemHeight}px` : "auto"}`,
       }}
     >
       {isVisual && props.children}

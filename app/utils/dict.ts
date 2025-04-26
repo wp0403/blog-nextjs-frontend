@@ -590,24 +590,24 @@ export const about =
 
 // 更多列表
 export const moreList = [
-  {
-    id: "resume",
-    title: "我的简历",
-    desc: "我的个人简历",
-    url: "/resume",
-  },
-  {
-    id: "visitor",
-    title: "访客列表",
-    desc: "访客的信息",
-    url: "/visitor",
-  },
-  {
-    id: "start-pages",
-    title: "起始页",
-    desc: "替代传统搜索首页，提供更多的可配置设置",
-    url: "https://start.wp-boke.work",
-  },
+  // {
+  //   id: "resume",
+  //   title: "我的简历",
+  //   desc: "我的个人简历",
+  //   url: "/resume",
+  // },
+  // {
+  //   id: "visitor",
+  //   title: "访客列表",
+  //   desc: "访客的信息",
+  //   url: "/visitor",
+  // },
+  // {
+  //   id: "start-pages",
+  //   title: "起始页",
+  //   desc: "替代传统搜索首页，提供更多的可配置设置",
+  //   url: "https://start.wp-boke.work",
+  // },
   {
     id: "stats.uptimerobot",
     title: "页面状态监控",

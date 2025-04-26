@@ -9,7 +9,7 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-.tree_hole.opacity-100 {
+.tree_hole.opacity_100 {
   opacity: 1;
 }
 
