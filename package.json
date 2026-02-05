@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node": "18.19.0"
+    "node": "24.x"
   },
   "name": "next-blog-14",
   "version": "0.1.0",
