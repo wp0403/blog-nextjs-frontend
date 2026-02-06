@@ -1,21 +1,16 @@
 import fs from "fs";
 import { SitemapStream, streamToPromise } from "sitemap";
 
-export async function GET(req: Request, res: Response) {
-  // Create a Sitemap stream
+export async function GET(req: Request) {
   const sitemapStream = new SitemapStream({
     hostname: "https://wp-boke.work",
   });
 
-  // Add URLs to the Sitemap stream
   const pages = ["/blog-details/38", "/secret", "/blog-details/45"];
   pages?.map((v) => sitemapStream.write({ url: `${v}` }));
-  // ...
 
-  // End the stream
   sitemapStream.end();
 
-  // Generate the XML
   const sitemap = await streamToPromise(sitemapStream);
 
   const serverName = process.env.SERVER_NAME;
@@ -24,8 +19,7 @@ export async function GET(req: Request, res: Response) {
     fs.writeFileSync(sitemapPath, sitemap);
   }
 
-  // Write the XML to the response
-  let myResponse = new Response(sitemap, {
+  const myResponse = new Response(sitemap.toString(), {
     status: 200,
     headers: {
       "Content-Type": "application/xml",
@@ -33,5 +27,5 @@ export async function GET(req: Request, res: Response) {
     },
   });
 
-  return myResponse
+  return myResponse;
 }

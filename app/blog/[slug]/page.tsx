@@ -5,17 +5,19 @@ export const dynamicParams = false;
 
 // 动态路由
 export async function generateStaticParams() {
-  const posts = await getData({
-    type: "all_blog_PageList",
-    config: { next: { revalidate: 6000 } },
-  });
-
-  const arr = [] as string[];
-  for (let i = 1; i <= posts.data; i++) {
-    arr.push(i.toString());
+  try {
+    const posts = await getData({
+      type: "all_blog_PageList",
+      config: { next: { revalidate: 6000 } },
+    });
+    const arr = [] as string[];
+    for (let i = 1; i <= posts.data; i++) {
+      arr.push(i.toString());
+    }
+    return arr.map((v) => ({ slug: v }));
+  } catch {
+    return [];
   }
-
-  return arr.map((v) => ({ slug: v }));
 }
 
 // 获取数据

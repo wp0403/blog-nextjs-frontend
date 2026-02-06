@@ -10,7 +10,7 @@ import fs from "fs";
 import { SitemapStream, streamToPromise } from "sitemap";
 import getDataApi from "@/utils/httpClient/request";
 
-export async function GET(req: Request, res: Response) {
+export async function GET(req: Request) {
   // Create a Sitemap stream
   const sitemapStream = new SitemapStream({
     hostname: "https://wp-boke.work",
@@ -30,14 +30,14 @@ export async function GET(req: Request, res: Response) {
   ];
   pages?.map((v) => sitemapStream.write({ url: `${v}` }));
 
-  // 调用外部 API 获取内容
-  const classifyList = (await getDataApi({ type: "all_blog_List" })).data;
-
-  classifyList?.map((v) =>
-    sitemapStream.write({
-      url: `/blog-details/${v.id}`,
-    })
-  );
+  try {
+    const classifyList = (await getDataApi({ type: "all_blog_List" })).data;
+    classifyList?.map((v) =>
+      sitemapStream.write({
+        url: `/blog-details/${v.id}`,
+      }),
+    );
+  } catch {}
   // ...
 
   // End the stream
@@ -53,7 +53,7 @@ export async function GET(req: Request, res: Response) {
   }
 
   // Write the XML to the response
-  let myResponse = new Response(sitemap, {
+  let myResponse = new Response(sitemap.toString(), {
     status: 200,
     headers: {
       "Content-Type": "application/xml",

@@ -7,10 +7,12 @@ import PostClient from "./post-client";
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  // 调用外部 API 获取内容
-  const res = await getData({ type: "all_blog_List" });
-
-  return res.data.map(({ id }) => ({ blogId: id.toString() }));
+  try {
+    const res = await getData({ type: "all_blog_List" });
+    return res.data.map(({ id }) => ({ blogId: id.toString() }));
+  } catch {
+    return [];
+  }
 }
 
 async function getPost(params: { blogId: string | number }) {

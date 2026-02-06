@@ -2,7 +2,7 @@ import fs from "fs";
 import RSS from "rss";
 import getDataApi from "@/utils/httpClient/request";
 
-export async function GET(req: Request, res: Response) {
+export async function GET(req: Request) {
   const feed = new RSS({
     title: "Shimmer RSS",
     description: "shimmer博客的rss",
@@ -12,26 +12,26 @@ export async function GET(req: Request, res: Response) {
     pubDate: new Date(),
   });
 
-  // 调用外部 API 获取内容
-  const classifyList = (await getDataApi({ type: "all_blog_List" })).data;
-
-  classifyList?.map(
-    (v: {
-      title: string;
-      desc: string;
-      id: string | number;
-      userInfo: { name: string };
-      time_str: string;
-    }) => {
-      feed.item({
-        title: v.title,
-        description: v.desc,
-        url: `https://wp-boke.work/blog-details/${v.id}`,
-        author: v.userInfo?.name,
-        date: v.time_str,
-      });
-    }
-  );
+  try {
+    const classifyList = (await getDataApi({ type: "all_blog_List" })).data;
+    classifyList?.map(
+      (v: {
+        title: string;
+        desc: string;
+        id: string | number;
+        userInfo: { name: string };
+        time_str: string;
+      }) => {
+        feed.item({
+          title: v.title,
+          description: v.desc,
+          url: `https://wp-boke.work/blog-details/${v.id}`,
+          author: v.userInfo?.name,
+          date: v.time_str,
+        });
+      },
+    );
+  } catch {}
 
   const rssContent = feed.xml();
 
