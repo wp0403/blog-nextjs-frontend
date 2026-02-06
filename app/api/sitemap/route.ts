@@ -46,8 +46,8 @@ export async function GET(req: Request) {
   // Generate the XML
   const sitemap = await streamToPromise(sitemapStream);
 
-  const serverName = process.env.SERVER_NAME;
-  if (serverName !== "vercel") {
+  const isVercel = process.env.VERCEL === "1";
+  if (!isVercel) {
     const sitemapPath = "./public/sitemap.xml";
     fs.writeFileSync(sitemapPath, sitemap);
   }

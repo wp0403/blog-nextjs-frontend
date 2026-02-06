@@ -13,8 +13,8 @@ export async function GET(req: Request) {
 
   const sitemap = await streamToPromise(sitemapStream);
 
-  const serverName = process.env.SERVER_NAME;
-  if (serverName !== "vercel") {
+  const isVercel = process.env.VERCEL === "1";
+  if (!isVercel) {
     const sitemapPath = "./public/dead-chain.xml";
     fs.writeFileSync(sitemapPath, sitemap);
   }

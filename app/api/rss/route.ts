@@ -35,8 +35,8 @@ export async function GET(req: Request) {
 
   const rssContent = feed.xml();
 
-  const serverName = process.env.SERVER_NAME;
-  if (serverName !== "vercel") {
+  const isVercel = process.env.VERCEL === "1";
+  if (!isVercel) {
     const sitemapPath = "./public/rss.xml";
     fs.writeFileSync(sitemapPath, rssContent);
   }
