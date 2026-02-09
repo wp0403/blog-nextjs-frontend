@@ -1,5 +1,5 @@
 {
-"installCommand": "npm ci --no-audit --no-fund --prefer-offline --no-progress",
+  "installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": ".next"
 }
