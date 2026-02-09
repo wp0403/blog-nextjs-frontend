@@ -1,5 +1,5 @@
 {
-  "installCommand": "npm install",
-  "buildCommand": "npm run build",
+"installCommand": "pnpm install --frozen-lockfile --prefer-offline",
+"buildCommand": "pnpm run build",
   "outputDirectory": ".next"
 }
