@@ -1,5 +1,0 @@
-ignoredBuiltDependencies:
-  - core-js
-  - es5-ext
-  - sharp
-  - unrs-resolver
