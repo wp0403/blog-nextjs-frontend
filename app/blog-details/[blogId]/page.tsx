@@ -1,22 +1,18 @@
 import { serialize } from "next-mdx-remote/serialize";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
-import getData from "@/utils/httpClient/request";
+import { safeGetData } from "@/utils/httpClient/request";
 import PostClient from "./post-client";
 
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  try {
-    const res = await getData({ type: "all_blog_List" });
-    return res.data.map(({ id }) => ({ blogId: id.toString() }));
-  } catch {
-    return [];
-  }
+  const res = await safeGetData({ type: "all_blog_List" });
+  return res.data.map(({ id }) => ({ blogId: id.toString() }));
 }
 
 async function getPost(params: { blogId: string | number }) {
-  return await getData({
+  return await safeGetData({
     type: "all_blog_ClassifyDetail",
     params: { id: params.blogId },
   });

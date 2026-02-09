@@ -1,6 +1,6 @@
 import fs from "fs";
 import RSS from "rss";
-import getDataApi from "@/utils/httpClient/request";
+import { safeGetData } from "@/utils/httpClient/request";
 
 export async function GET(req: Request) {
   const feed = new RSS({
@@ -12,26 +12,24 @@ export async function GET(req: Request) {
     pubDate: new Date(),
   });
 
-  try {
-    const classifyList = (await getDataApi({ type: "all_blog_List" })).data;
-    classifyList?.map(
-      (v: {
-        title: string;
-        desc: string;
-        id: string | number;
-        userInfo: { name: string };
-        time_str: string;
-      }) => {
-        feed.item({
-          title: v.title,
-          description: v.desc,
-          url: `https://wp-boke.work/blog-details/${v.id}`,
-          author: v.userInfo?.name,
-          date: v.time_str,
-        });
-      },
-    );
-  } catch {}
+  const classifyList = (await safeGetData({ type: "all_blog_List" })).data;
+  classifyList?.map(
+    (v: {
+      title: string;
+      desc: string;
+      id: string | number;
+      userInfo: { name: string };
+      time_str: string;
+    }) => {
+      feed.item({
+        title: v.title,
+        description: v.desc,
+        url: `https://wp-boke.work/blog-details/${v.id}`,
+        author: v.userInfo?.name,
+        date: v.time_str,
+      });
+    },
+  );
 
   const rssContent = feed.xml();
 

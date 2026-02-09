@@ -8,7 +8,7 @@
  */
 import fs from "fs";
 import { SitemapStream, streamToPromise } from "sitemap";
-import getDataApi from "@/utils/httpClient/request";
+import { safeGetData } from "@/utils/httpClient/request";
 
 export async function GET(req: Request) {
   // Create a Sitemap stream
@@ -30,14 +30,12 @@ export async function GET(req: Request) {
   ];
   pages?.map((v) => sitemapStream.write({ url: `${v}` }));
 
-  try {
-    const classifyList = (await getDataApi({ type: "all_blog_List" })).data;
-    classifyList?.map((v) =>
-      sitemapStream.write({
-        url: `/blog-details/${v.id}`,
-      }),
-    );
-  } catch {}
+  const classifyList = (await safeGetData({ type: "all_blog_List" })).data;
+  classifyList?.map((v) =>
+    sitemapStream.write({
+      url: `/blog-details/${v.id}`,
+    }),
+  );
   // ...
 
   // End the stream
